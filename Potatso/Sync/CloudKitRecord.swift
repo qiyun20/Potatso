@@ -12,14 +12,14 @@ import CloudKit
 import Realm
 import RealmSwift
 
-let potatsoZoneId = CKRecordZoneID(zoneName: "PotatsoCloud", ownerName: CKOwnerDefaultName)
+let potatsoZoneId = CKRecordZone.ID(zoneName: "PotatsoCloud", ownerName: CKOwnerDefaultName)
 let potatsoDB = CKContainer.default().privateCloudDatabase
 let potatsoSubscriptionId = "allSubscription"
 
 public protocol CloudKitRecord {
     static var recordType: String { get }
     static var keys: [String] { get }
-    var recordId: CKRecordID { get }
+    var recordId: CKRecord.ID { get }
     func toCloudKitRecord() -> CKRecord
     static func fromCloudKitRecord(_ record: CKRecord) -> Self
 }
@@ -42,8 +42,8 @@ extension Proxy: CloudKitRecord {
         return basekeys + ["typeRaw", "name", "host", "port", "authscheme", "user", "password", "ota", "ssrProtocol", "ssrObfs", "ssrObfsParam"]
     }
 
-    public var recordId: CKRecordID {
-        return CKRecordID(recordName: uuid, zoneID: potatsoZoneId)
+    public var recordId: CKRecord.ID {
+        return CKRecord.ID(recordName: uuid, zoneID: potatsoZoneId)
     }
 
     public func toCloudKitRecord() -> CKRecord {
@@ -55,13 +55,13 @@ extension Proxy: CloudKitRecord {
     }
 
     public static func fromCloudKitRecord(_ record: CKRecord) -> Self {
-        let proxy = self.init()
+        let proxy = Proxy.init()
         for key in Proxy.keys {
             if let v = record.value(forKey: key) {
                 proxy.setValue(v, forKey: key)
             }
         }
-        return proxy
+        return proxy as! Self
     }
 }
 
@@ -75,8 +75,8 @@ extension RuleSet: CloudKitRecord {
         return basekeys + ["editable", "name", "remoteUpdatedAt", "desc", "ruleCount", "isSubscribe", "isOfficial", "rulesJSON"]
     }
 
-    public var recordId: CKRecordID {
-        return CKRecordID(recordName: uuid, zoneID: potatsoZoneId)
+    public var recordId: CKRecord.ID {
+        return CKRecord.ID(recordName: uuid, zoneID: potatsoZoneId)
     }
 
     public func toCloudKitRecord() -> CKRecord {
@@ -108,8 +108,8 @@ extension ConfigurationGroup: CloudKitRecord {
         return basekeys + ["editable", "name", "defaultToProxy"]
     }
 
-    public var recordId: CKRecordID {
-        return CKRecordID(recordName: uuid, zoneID: potatsoZoneId)
+    public var recordId: CKRecord.ID {
+        return CKRecord.ID(recordName: uuid, zoneID: potatsoZoneId)
     }
 
     public func toCloudKitRecord() -> CKRecord {
@@ -123,7 +123,7 @@ extension ConfigurationGroup: CloudKitRecord {
     }
 
     public static func fromCloudKitRecord(_ record: CKRecord) -> Self {
-        let group = self.init()
+        let group = ConfigurationGroup.init()
         for key in ConfigurationGroup.keys {
             if let v = record.value(forKey: key) {
                 group.setValue(v, forKey: key)
@@ -146,7 +146,7 @@ extension ConfigurationGroup: CloudKitRecord {
                 group.ruleSets.append(r)
             }
         }
-        return group
+        return group as! Self
     }
 }
 
@@ -199,7 +199,7 @@ func changeLocalRecord(_ record: CKRecord) throws {
     try DBUtils.add(realmObject, setModified: false)
 }
 
-func deleteLocalRecord(_ recordID: CKRecordID) throws {
+func deleteLocalRecord(_ recordID: CKRecord.ID) throws {
     let id = recordID.recordName
     try DBUtils.hardDelete(id, type: Proxy.self)
     try DBUtils.hardDelete(id, type: RuleSet.self)

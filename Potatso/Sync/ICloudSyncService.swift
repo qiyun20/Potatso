@@ -89,28 +89,28 @@ class ICloudSyncService: SyncServiceProtocol {
 
     func subscribeNotification() {
         DDLogInfo("subscribing cloudkit database changes...")
-        let subscription = CKSubscription(zoneID: potatsoZoneId, subscriptionID: potatsoSubscriptionId, options: CKSubscriptionOptions(rawValue: 0))
-        let info = CKNotificationInfo()
-        info.shouldSendContentAvailable = true
-        subscription.notificationInfo = info
-        potatsoDB.save(subscription, completionHandler: { (sub, error) in
-            if let error = error {
-                DDLogError("subscribe cloudkit database changes error: \(error.localizedDescription)")
-            } else {
-                DDLogInfo("subscribe cloudkit database changes success")
-            }
-        }) 
+//        let subscription = CKSubscription(zoneID: potatsoZoneId, subscriptionID: potatsoSubscriptionId, options: CKSubscriptionOptions(rawValue: 0))
+//        let info = CKSubscription.NotificationInfo()
+//        info.shouldSendContentAvailable = true
+//        subscription.notificationInfo = info
+//        potatsoDB.save(subscription, completionHandler: { (sub, error) in
+//            if let error = error {
+//                DDLogError("subscribe cloudkit database changes error: \(error.localizedDescription)")
+//            } else {
+//                DDLogInfo("subscribe cloudkit database changes success")
+//            }
+//        })
     }
 
     func unsubscribeNotification() {
         DDLogInfo("unsubscribing cloudkit database changes...")
-        potatsoDB.delete(withSubscriptionID: potatsoSubscriptionId) { (id, error) in
-            if let error = error {
-                DDLogError("unsubscribe cloudkit database changes error: \(error.localizedDescription)")
-            } else {
-                DDLogInfo("unsubscribe cloudkit database changes success")
-            }
-        }
+//        potatsoDB.delete(withSubscriptionID: potatsoSubscriptionId) { (id, error) in
+//            if let error = error {
+//                DDLogError("unsubscribe cloudkit database changes error: \(error.localizedDescription)")
+//            } else {
+//                DDLogInfo("unsubscribe cloudkit database changes success")
+//            }
+//        }
     }
 
     func stop() {

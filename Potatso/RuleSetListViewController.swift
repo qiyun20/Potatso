@@ -33,33 +33,33 @@ class RuleSetListViewController: UIViewController, UITableViewDataSource, UITabl
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationItem.title = "Rule Set".localized()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(add))
-        reloadData()
-        token = ruleSets.addNotificationBlock { [unowned self] (changed) in
-            switch changed {
-            case let .update(_, deletions: deletions, insertions: insertions, modifications: modifications):
-                self.tableView.beginUpdates()
-                defer {
-                    self.tableView.endUpdates()
-                }
-                self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
-                self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
-                self.tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }), with: .none)
-            case let .error(error):
-                error.log("RuleSetListVC realm token update error")
-            default:
-                break
-            }
-        }
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        token?.stop()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        navigationItem.title = "Rule Set".localized()
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(add))
+//        reloadData()
+//        token = ruleSets.addNotificationBlock { [unowned self] (changed) in
+//            switch changed {
+//            case let .update(_, deletions: deletions, insertions: insertions, modifications: modifications):
+//                self.tableView.beginUpdates()
+//                defer {
+//                    self.tableView.endUpdates()
+//                }
+//                self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+//                self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+//                self.tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }), with: .none)
+//            case let .error(error):
+//                error.log("RuleSetListVC realm token update error")
+//            default:
+//                break
+//            }
+//        }
+//    }
+//
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        token?.stop()
+//    }
 
     func reloadData() {
         ruleSets = DBUtils.allNotDeleted(RuleSet.self, sorted: "createAt")
@@ -105,7 +105,7 @@ class RuleSetListViewController: UIViewController, UITableViewDataSource, UITabl
         if let height = heightAtIndex[indexPath.row] {
             return height
         } else {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }
     }
 
@@ -113,11 +113,11 @@ class RuleSetListViewController: UIViewController, UITableViewDataSource, UITabl
         return chooseCallback == nil
     }
 
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let item: RuleSet
             guard indexPath.row < ruleSets.count else {
@@ -151,7 +151,7 @@ class RuleSetListViewController: UIViewController, UITableViewDataSource, UITabl
         v.tableFooterView = UIView()
         v.tableHeaderView = UIView()
         v.separatorStyle = .singleLine
-        v.rowHeight = UITableViewAutomaticDimension
+        v.rowHeight = UITableView.automaticDimension
         return v
     }()
 

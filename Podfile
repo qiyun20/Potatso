@@ -4,22 +4,22 @@ platform :ios, '9.0'
 use_frameworks!
 
 def library
-    pod 'KissXML', '~> 5.2.2'
+    pod 'KissXML'
     pod 'ICSMainFramework', :path => "./Library/ICSMainFramework/"
-    pod 'MMWormhole', '~> 2.0.0'
+    pod 'MMWormhole'
     pod 'KeychainAccess'
 end
 
 def tunnel
-    pod 'MMWormhole', '~> 2.0.0'
+    pod 'MMWormhole'
 end
 
 def socket
-    pod 'CocoaAsyncSocket', '~> 7.4.3'
+    pod 'CocoaAsyncSocket'
 end
 
 def model
-    pod 'RealmSwift', '~> 2.10.2'
+    pod 'RealmSwift'
 end
 
 target "Potatso" do
@@ -31,13 +31,13 @@ target "Potatso" do
     pod 'Eureka'
     pod 'MBProgressHUD'
     pod 'CallbackURLKit', :path => "./Library/CallbackURLKit"
-    pod 'ICDMaterialActivityIndicatorView', '~> 0.1.0'
-    pod 'Reveal-iOS-SDK', '~> 1.6.2', :configurations => ['Debug']
-    pod 'ICSPullToRefresh', '~> 0.6'
-    pod 'ISO8601DateFormatter', '~> 0.8'
+    pod 'ICDMaterialActivityIndicatorView'
+    pod 'Reveal-iOS-SDK', :configurations => ['Debug']
+    pod 'ICSPullToRefresh'
+    pod 'ISO8601DateFormatter'
     pod 'Alamofire'
     pod 'ObjectMapper'
-    pod 'CocoaLumberjack/Swift', '~> 3.0.0'
+    pod 'CocoaLumberjack/Swift'
     pod 'PSOperations'
     tunnel
     library
@@ -71,9 +71,5 @@ end
 
 target "PotatsoModel" do
     model
-end
-
-target "PotatsoLibraryTests" do
-    library
 end
 
